@@ -1,18 +1,17 @@
 // ==UserScript==
 // @name         BuenaIsla
 // @namespace    http://www.ZeroDrako.com/
-// @version      0.8
+// @version      1.1
 // @description  Download Images BuenaIsla
 // @author       ZeroDrako
 // @match        http://www.buenaisla.com/*
 // @grant        none
 // ==/UserScript==
 
-var capa = document.getElementById("s");
 var boton = document.createElement("BUTTON");
 boton.id = "SaveImages";
 boton.class = "botonBuscar";
-var t = document.createTextNode("Guardar!!!");
+var t = document.createTextNode("Guardar");
 boton.appendChild(t);
 var list = document.getElementById("temaPuntuacion");
 list.insertBefore(boton, list.childNodes[0]);
