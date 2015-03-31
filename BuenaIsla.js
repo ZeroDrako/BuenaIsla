@@ -10,7 +10,6 @@
 
 var boton = document.createElement("BUTTON");
 boton.id = "SaveImages";
-boton.class = "botonBuscar";
 var t = document.createTextNode("Guardar");
 boton.appendChild(t);
 var list = document.getElementById("temaPuntuacion");
