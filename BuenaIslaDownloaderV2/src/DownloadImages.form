@@ -254,9 +254,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="linkurl">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="http://www.buenaisla.com/tema/hentai-Etsuraku-no-Tobira-Capitulo-01-15789"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>

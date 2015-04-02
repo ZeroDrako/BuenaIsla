@@ -148,8 +148,6 @@ public class DownloadImages extends javax.swing.JFrame {
 
         numImagesListas.setText("00");
 
-        linkurl.setText("http://www.buenaisla.com/tema/hentai-Etsuraku-no-Tobira-Capitulo-01-15789");
-
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("Nombre:");
 
