@@ -1,0 +1,39 @@
+v.7:
+  -Agregada la opcion de descragar multiples imagenes
+  -Ahora se renombra con un numero secuencial (00.jpg,01.jpg,02.jpg..etc)
+  
+v.9:
+  -Corregido el error al excribir el archivo
+  -Agregada barra de progreso por cada imagen
+  -Agregada barra de progreso al verificar el post
+  -Verificacion de la URL mediante un patron
+  
+v1.0: Primera version publicada
+  -Agregada opcion para reiniciar la interface y variables
+  -Agregada opcion "Obtener del ClipBoard"
+  -Agregada informacion del numero de imagenes asi como el tamaño total descragado
+  -Ahora se crea un subfolder con el nombre del post (toma la primera linea en el TextArea como el nombre)
+  -Arraglado un FC sl reiniciar los parametros
+  
+v1.3: (No publicada, solo pruebas)
+  -Funcion para descargar el conteido de la pagina (http & https)
+  -Correccion de la denegacion del servidor al descargar el contenido del HTML
+
+v1.5: (No publicada, solo pruebas)
+  -Funcion para obtener el nombre del post
+  -Correccion del patron aplicado al obtener el nombre del post
+
+v1.9: (No publicada, solo pruebas)
+  -Obtimizacion el los patrones para obtener los nombres del post e imagenes
+  -Agregada funcion para ontener el formato de la imagen (ahora cualquier formato, no solo imagenes)
+  -Reduccion del codigo
+  -Agregada las excepciones para las iagenes "fecha.png" & "visitas.png"
+
+v2.0: Version publicada
+  -Ahora funciona es su totalidad sin el complemento para el navegador (no es necesario el JS)
+  -Se agrego el uso de la libreria SOUP: http://jsoup.org/
+  -Correccion de la funcion para obtener formatos de imagen (por default solo PNG,JPG,JPEG)
+  -Agregado condicional para verificar que posea "http://" & "https://" (se agrega si no se encuentra)
+  -Reduccion de codigo (eliminacion de 10 Clases reemplaadas por Jsoup)
+  -Correccion del error al obtener el nombre del post cuando es un tema destacado (optimizacion del Patron)
+  -Se agrega un nombre por default "Sin Titulo", en caso de no ombeterlo del post
