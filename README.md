@@ -20,9 +20,6 @@ Edicion
 - Selecciona File->OpenProject
 - Carga la carpeta "BuenaIslaDownloaderV2"
 
-
-Puedes acceder a esta acción entrando en Video -> Addons de video -> Conseguir más -> .. (Atras) -> .. (Atras) -> Instalar desde .zip
-
 Notas (BuenaIslaDownloaderV2)
 ============
 - La V1 ya no es actualizada
