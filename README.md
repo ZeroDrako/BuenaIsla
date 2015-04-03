@@ -29,5 +29,4 @@ Notas (BuenaIslaDownloaderV2)
 Imagenes
 ============
 ![Alt text](/Images/sshot-1.png?raw=true "")
-![Alt text](/Images/sshot-2.png?raw=true "")
 ![Alt text](/Images/sshot-3.png?raw=true "")
