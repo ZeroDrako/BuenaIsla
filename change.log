@@ -37,3 +37,14 @@ v2.0: Version publicada
   -Reduccion de codigo (eliminacion de 10 Clases reemplaadas por Jsoup)
   -Correccion del error al obtener el nombre del post cuando es un tema destacado (optimizacion del Patron)
   -Se agrega un nombre por default "Sin Titulo", en caso de no ombeterlo del post
+
+v2.3: Version publicada
+  -Cambio de TextArea por JTable (cambio de funciones correspondientes)
+  -Agregados botones dinamicos(se activan/desactivan segun la opcion ejecutandose)
+  -Agregado apartado Status, posee 3 valores posibles:
+      ->En Espera (para ser descargado)
+      ->Descragado (el archivo se descargo sin problemas)
+      ->Omitido (El archivo ya existe)
+      ->Error (no se tiene permiso para escribir el archivo)
+  -Agregado un menu superior
+  -Agregada opcion de eliminar imagenes de la lista
