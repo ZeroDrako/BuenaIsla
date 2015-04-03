@@ -10,9 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,8 +34,10 @@ public class Content implements Runnable {
 
     String url = "";
     JTextField nameDown;
-    JTextArea areaurls;
+    JTable tabImgs;
     JProgressBar barra;
+    JLabel nImgTotal;
+    JButton bDescargar, bVerificar;
 
     @Override
     public void run() {
@@ -42,38 +47,40 @@ public class Content implements Runnable {
             content = GetHTML(url);
             GetImages(content);
             barra.setIndeterminate(false);
+            bVerificar.setEnabled(false);
+            bDescargar.setEnabled(true);
         } catch (IOException ex) {
             Logger.getLogger(Content.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void Preparar(String turl, JTextArea tarea, JProgressBar barProgreso,
-            JTextField named) {
+    public void Preparar(String turl, JTable tabla, JProgressBar barProgreso, 
+            JTextField named, JLabel nIT, JButton bDes, JButton bVer) {
         this.nameDown = named;
-        this.areaurls = tarea;
+        this.tabImgs = tabla;
         this.url = turl;
+        this.nImgTotal = nIT;
+        this.bDescargar = bDes;
+        this.bVerificar = bVer;
         this.barra = barProgreso;
     }
 
     public void GetImages(String all) {
-        //File input = new File("tmp.html");
         Document doc = Jsoup.parse(all);
         Element content = doc.getElementById("contenido_post");
         Elements links = content.getElementsByTag("img");
-        String images = "";
-        for (Element link : links) {
-            String linkHref = link.attr("src");
+        DefaultTableModel modelo = (DefaultTableModel) tabImgs.getModel();
+        links.stream().map((link) -> link.attr("src")).forEach((String linkHref) -> {
             if (linkHref.endsWith("fecha.png") | linkHref.endsWith("visitas.png")) {
             } else {
                 if (linkHref.endsWith(".jpg") | linkHref.endsWith(".jpeg") | linkHref.endsWith(".png")) {
-                    images += linkHref + "\n";
+                    String[] data = {linkHref,"En Espera"};
+                    modelo.addRow(data);
                 }
             }
-
-        }
+        });
         Elements content2 = doc.getElementsByClass("titulo");
-        String tmp = content2.toString();
-        
+        String tmp = content2.toString(); 
         Pattern patt1 = Pattern.compile("\"titulo\">.+<span");
         Matcher matc1 = patt1.matcher(tmp);
         Pattern patt2 = Pattern.compile("destacado\\s\">.+<span");
@@ -89,10 +96,10 @@ public class Content implements Runnable {
             name = name.replace(" <span", "");
         }
         this.nameDown.setText(name);
-        this.areaurls.setText(images);
+        this.nImgTotal.setText(""+tabImgs.getRowCount());
     }
 
-    private static String GetHTML(String urlString)
+    private static String GetHTML(String urlString) 
             throws MalformedURLException, IOException {
         if (!urlString.contains("http://")) {
             urlString = "http://" + urlString;
@@ -110,5 +117,4 @@ public class Content implements Runnable {
         }
         return content;
     }
-
 }

@@ -7,129 +7,116 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author ZeroDrako
  */
-public class Downloader implements Runnable{
+public class Downloader implements Runnable {
+
+    Util util = new Util();
     
-    JLabel numImagesTotal;
     JLabel numImagesListas;
-    String nameDown;
-    JTextArea areaUrls;
+    String nameDown, rutaDescargas;
+    JTable tabImgs;
     JProgressBar barProgreso;
-    String rutaDescargas;
     int numImgDown = 1;
-    double peso = 0;
-    boolean ban = false;
-    //DecimalFormat formato = new DecimalFormat("#.00");
-    
-   @Override
+    Object[][] info = null;
+    JButton  bVerificar,bDescargar;
+
+    @Override
     public void run() {
-        String[] imagenes = Obtener();
-        numImagesTotal.setText("" + (imagenes.length - 1));
-        Proceso(imagenes);
+        this.info = util.Contenido(tabImgs);
+        Proceso(info);
     }
-    
-    
-    public void Preparar(String rutaDescargas, JLabel numImagesTotal, JLabel numImagesListas,
-            JTextArea areaUrls, JProgressBar barProgreso, String named) {
+
+    public void Preparar(String rutaDescargas, JLabel numImagesListas,
+            JTable tabla, JProgressBar barProgreso, String named, JButton bVe, JButton bDes) {
         this.rutaDescargas = rutaDescargas;
-        this.numImagesTotal = numImagesTotal;
         this.numImagesListas = numImagesListas;
-        this.areaUrls = areaUrls;
+        this.tabImgs = tabla;
         this.barProgreso = barProgreso;
         this.nameDown = named;
+        this.bVerificar = bVe;
+        this.bDescargar = bDes;
         numImgDown = 1;
     }
 
-    public String[] Obtener() {
-        String[] imagenes;
-        String datos = areaUrls.getText();
-        imagenes = datos.split("\n");
-        return imagenes;
-    }
-    
-//    public double Redondeo(double este) {
-//        String myformato = formato.format(este);
-//        double value = Double.parseDouble(myformato);
-//        return value;
-//    }
-    
-    public void Proceso(String[] imagenes) {
-        String aux = "";
-        String name = nameDown;
-        System.out.println(imagenes.length);
-        rutaDescargas += File.separator + name; 
-        for (int i = 0; i < imagenes.length; i++) {
-            String format = Format(imagenes[i]);
-            if (imagenes.length > 99) {
+    public void Proceso(Object[][] info) {
+        String fileName;
+        rutaDescargas += File.separator + nameDown;
+        for (int i = 0; i < info.length; i++) {
+            String urlImage = info[i][0].toString();
+            String format = Format(urlImage);
+            if (info.length > 99) {
                 if (i < 10) {
-                    aux = "00" + i + "." + format;
+                    fileName = "00" + i + "." + format;
                 } else {
-                    aux = "0" + i + "." + format;
+                    fileName = "0" + i + "." + format;
                 }
             } else {
                 if (i < 10) {
-                    aux = "0" + i + "." + format;
+                    fileName = "0" + i + "." + format;
                 } else {
-                    aux = "" + i + "." + format;
+                    fileName = "" + i + "." + format;
                 }
             }
-            Download(imagenes[i], aux, rutaDescargas);
+            Download(urlImage, fileName, rutaDescargas, i);
         }
-//        tamImages.setText(peso + " Mb");
+        bVerificar.setEnabled(true);
+        bDescargar.setEnabled(false);
     }
 
-    public void Download(String fileURL, String fileName, String fileFolder) {
+    public void Download(String fileURL, String fileName, String fileFolder, int row) {
         OutputStream out = null;
-        URLConnection conn = null;
+        URLConnection conn;
         InputStream in = null;
-        try {
-            new File(fileFolder).mkdir();
-            URL url = new URL(fileURL);
-            out = new BufferedOutputStream(new FileOutputStream(fileFolder + File.separator + fileName));
-            conn = url.openConnection();
-            in = conn.getInputStream();
-            int length = conn.getContentLength();
-            byte[] buffer = new byte[1024];
-            int numRead;
-            int current = 0;
-            barProgreso.setMinimum(0);
-            barProgreso.setMaximum(length);
-            double numWritten = 0;
-            while ((numRead = in.read(buffer)) != -1) {
-                out.write(buffer, 0, numRead);
-                barProgreso.setValue(current);
-                numWritten += numRead;
-                current += numRead;
-            }
-            numImagesListas.setText(""+numImgDown);
-            numImgDown++;
-            barProgreso.setValue(length);
-//            peso += Redondeo((numWritten / 1024) / 1024);
-//            peso = Redondeo(peso);
-        } catch (Exception e) {
-           
-        } finally {
+        File comp = new File(fileFolder + File.separator + fileName);
+        if (comp.exists()) {
+            tabImgs.setValueAt("Omitido", row, 1);
+        } else {
             try {
-                if (in != null) {
-                    in.close();
+                new File(fileFolder).mkdir();
+                URL url = new URL(fileURL);
+                out = new BufferedOutputStream(new FileOutputStream(fileFolder + File.separator + fileName));
+                conn = url.openConnection();
+                in = conn.getInputStream();
+                int length = conn.getContentLength();
+                byte[] buffer = new byte[1024];
+                int numRead;
+                int current = 0;
+                barProgreso.setMinimum(0);
+                barProgreso.setMaximum(length);
+                while ((numRead = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, numRead);
+                    barProgreso.setValue(current);
+                    current += numRead;
                 }
-                if (out != null) {
-                    out.close();
+                numImagesListas.setText("" + numImgDown);
+                numImgDown++;
+                barProgreso.setValue(length);
+                tabImgs.setValueAt("Descargado", row, 1);
+            } catch (Exception e) {
+                tabImgs.setValueAt("Error", row, 1);
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException ioe) {
                 }
-            } catch (IOException ioe) {
             }
         }
     }
@@ -143,6 +130,4 @@ public class Downloader implements Runnable{
             return null;
         }
     }
-    
-    
 }
